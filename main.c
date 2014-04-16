@@ -4,7 +4,7 @@
 
 void usage(FILE *out)
 {
-	fprintf(out, "usage: prog\n");
+	fprintf(out, "usage: %s\n", PACKAGE_NAME);
 }
 
 void parseargs(int argc, char *argv[])

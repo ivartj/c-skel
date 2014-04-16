@@ -1,6 +1,8 @@
 #ifndef IO_H
 #define IO_H
 
+#include <stdio.h>
+
 typedef struct _io_writer io_writer;
 typedef struct _io_reader io_reader;
 
