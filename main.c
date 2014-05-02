@@ -20,6 +20,7 @@ void parseargs(int argc, char *argv[])
 	case 'h':
 		usage(stdout);
 		exit(EXIT_SUCCESS);
+	case ':':
 	case '?':
 		usage(stderr);
 		exit(EXIT_FAILURE);
