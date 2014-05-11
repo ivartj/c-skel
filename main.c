@@ -67,6 +67,7 @@ void xerror(const char *fmt, ...)
 	fprintf(stderr, "%s: ", program_name);
 	vfprintf(stderr, fmt, ap);
 	fprintf(stderr, ": %s.\n", strerror(errno));
+	va_end(ap);
 	exit(EXIT_FAILURE);
 }
 
