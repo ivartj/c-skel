@@ -1,10 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include <stdarg.h>
+#include <string.h>
+#include <errno.h>
+
+#define PROGRAM_NAME "prog"
+
+static const char *program_name = PROGRAM_NAME;
+static void usage(FILE *out);
+static void parseargs(int argc, char *argv[]);
+static const char *get_program_name(const char *argv0);
 
 void usage(FILE *out)
 {
-	fprintf(out, "usage: %s\n", PACKAGE_NAME);
+	fprintf(out, "usage: %s\n", program_name);
 }
 
 void parseargs(int argc, char *argv[])
@@ -35,8 +45,48 @@ void parseargs(int argc, char *argv[])
 	}
 }
 
+void error(const char *fmt, ...)
+{
+	va_list ap;
+
+	va_start(ap, fmt);
+	fprintf(stderr, "%s: ", program_name);
+	vfprintf(stderr, fmt, ap);
+	fprintf(stderr, ".\n");
+	va_end(ap);
+	exit(EXIT_FAILURE);
+}
+
+void xerror(const char *fmt, ...)
+{
+	va_list ap;
+	int errcode;
+
+	va_start(ap, fmt);
+	errcode = errno;
+	fprintf(stderr, "%s: ", program_name);
+	vfprintf(stderr, fmt, ap);
+	fprintf(stderr, ": %s.\n", strerror(errno));
+	exit(EXIT_FAILURE);
+}
+
+const char *get_program_name(const char *argv0)
+{
+	const char *sepcheck = NULL;
+
+	if(argv0 == NULL)
+		return PROGRAM_NAME;
+
+	for(sepcheck = argv0; *sepcheck != '\0'; sepcheck++)
+		if(*sepcheck == '/')
+			argv0 = sepcheck + 1;
+
+	return argv0;
+}
+
 int main(int argc, char *argv[])
 {
+	program_name = get_program_name(argv[0]);
 	parseargs(argc, argv);
 	exit(EXIT_SUCCESS);
 }

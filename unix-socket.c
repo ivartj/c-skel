@@ -23,17 +23,15 @@ const char *unix_strerror(void)
 }
 
 
-int is_socket(const char *filename)
+int unix_is_socket(const char *filename)
 {
 	struct stat statbuf;
 	int err;
 	int ok;
 
 	err = stat(filename, &statbuf);
-	if(err) {
-		snprintf(errmsg, ERRLEN, "Failed to inspect socket pathname '%s'", filename);
-		return -1;
-	}
+	if(err)
+		return 0;
 
 	ok = S_ISSOCK(statbuf.st_mode);
 	if(ok)
@@ -46,23 +44,16 @@ static int unlink_if_socket(const char *filename)
 {
 	int err;
 
-	switch(is_socket(filename)) {
-	case -1: /* error specified by is_socket */
-		return -1;
-	case 0:
-		snprintf(errmsg, ERRLEN, "Non-socket file on '%s'", filename);
-		return -2;
-	case 1:
-		err = unlink(filename);
-		if(err) {
-			snprintf(errmsg, ERRLEN, "Failed to unlink '%s': %s", filename, strerror(errno));
-			return -3;
-		}
+	if(!unix_is_socket(filename))
 		return 0;
-	default:
-		snprintf(errmsg, ERRLEN, "Unrecognized return value from is_socket");
-		return -4;
+
+	err = unlink(filename);
+	if(err) {
+		snprintf(errmsg, ERRLEN, "unlink(\"%s\"): %s", filename, strerror(errno));
+		return -1;
 	}
+
+	return 0;
 }
 
 int unix_listen(const char *filename)
