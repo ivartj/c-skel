@@ -4,6 +4,12 @@
 #include "args.h"
 #include "main.h"
 
+void args_usage(FILE *out)
+{
+	fprintf(out, "usage: %s\n", main_name);
+}
+
+
 void args_process(int argc, char *argv[])
 {
 	int c;
@@ -15,11 +21,11 @@ void args_process(int argc, char *argv[])
 	while((c = getopt_long(argc, argv, "h", longopts, NULL)) != -1)
 	switch(c) {
 	case 'h':
-		main_usage(stdout);
+		args_usage(stdout);
 		exit(EXIT_SUCCESS);
 	case ':':
 	case '?':
-		main_usage(stderr);
+		args_usage(stderr);
 		exit(EXIT_FAILURE);
 	}
 
@@ -27,7 +33,7 @@ void args_process(int argc, char *argv[])
 	case 0:
 		break;
 	default:
-		main_usage(stderr);
+		args_usage(stderr);
 		exit(EXIT_FAILURE);
 	}
 }
