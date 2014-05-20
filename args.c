@@ -10,11 +10,17 @@ void args_usage(FILE *out)
 }
 
 
+void args_version(FILE *out)
+{
+	fprintf(out, "%s version %s\n", main_name, PACKAGE_VERSION);
+}
+
 void args_process(int argc, char *argv[])
 {
 	int c;
 	static struct option longopts[] = {
 		{ "help", no_argument, NULL, 'h' },
+		{ "version", no_argument, NULL, 256 },
 		{ 0, 0, 0, 0 },
 	};
 
@@ -22,6 +28,9 @@ void args_process(int argc, char *argv[])
 	switch(c) {
 	case 'h':
 		args_usage(stdout);
+		exit(EXIT_SUCCESS);
+	case 256:
+		args_version(stdout);
 		exit(EXIT_SUCCESS);
 	case ':':
 	case '?':
