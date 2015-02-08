@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "args.h"
 #include "main.h"
+#include "config.h"
 
 void args_usage(FILE *out)
 {
@@ -12,7 +13,7 @@ void args_usage(FILE *out)
 
 void args_version(FILE *out)
 {
-	fprintf(out, "%s version %s\n", main_name, PACKAGE_VERSION);
+	fprintf(out, "%s version %s\n", main_name, PROJECT_VERSION);
 }
 
 void args_process(int argc, char *argv[])

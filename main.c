@@ -1,10 +1,9 @@
 #include <stdlib.h>
 #include "args.h"
 #include "log.h"
+#include "config.h"
 
-#define PROGRAM_NAME "prog"
-
-const char *main_name = PROGRAM_NAME;
+const char *main_name = PROJECT_NAME;
 
 int main(int argc, char *argv[])
 {
